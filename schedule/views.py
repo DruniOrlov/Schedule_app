@@ -26,11 +26,21 @@ class CampusCRView(mixins.ListModelMixin,
 
 class CampusUDView(mixins.UpdateModelMixin,
                    mixins.DestroyModelMixin,
+                   mixins.ListModelMixin,
                    generics.GenericAPIView):
 
     serializer_class = CampusSerializer
     queryset = Campus.objects.all()
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser | IsAuthenticatedOrReadOnly]
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = CampusSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message" : f"Campus with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -62,8 +72,14 @@ class AuditoriumUDView(mixins.UpdateModelMixin,
     queryset = Auditorium.objects.all()
     permission_classes = [IsAdminUser]
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = AuditoriumSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message": f"Auditorium with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
@@ -92,6 +108,15 @@ class GroupUDView(mixins.UpdateModelMixin,
     queryset = Group.objects.all()
     permission_classes = [IsAdminUser]
 
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = GroupSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message" : f"Group with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
@@ -121,6 +146,15 @@ class RingTimeUDView(mixins.UpdateModelMixin,
     serializer_class = RingTimeSerializer
     queryset = RingTime.objects.all()
     permission_classes = [IsAdminUser]
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = RingTimeSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message" : f"Ring timetable with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
@@ -152,6 +186,15 @@ class TutorUDView(mixins.UpdateModelMixin,
     queryset = Tutor.objects.all()
     permission_classes = [IsAdminUser]
 
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = TutorSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message" : f"Tutor with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
 
@@ -181,6 +224,15 @@ class LessonUDView(mixins.UpdateModelMixin,
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAdminUser]
+
+    def get(self, request, pk, *args, **kwargs):
+        try:
+            data = LessonSerializer(self.queryset.get(id=pk))
+            response = Response(status=http.HTTPStatus.OK, data=data.data)
+        except Campus.DoesNotExist:
+            data = {"message" : f"Lesson with id={pk} not found"}
+            response = Response(status=http.HTTPStatus.NOT_FOUND, data=data)
+        return response
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
