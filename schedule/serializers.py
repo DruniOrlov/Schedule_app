@@ -19,6 +19,12 @@ class TutorSerializer(serializers.ModelSerializer):
         fields = ["first_name", "last_name", "patronymic", "email", "phone"]
 
 
+class SubjectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Subject
+        fields = "__all__"
+
+
 class TutorNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField()
 
@@ -43,7 +49,10 @@ class LessonSerializer(serializers.ModelSerializer):
     number = serializers.IntegerField()
     begin = serializers.DateTimeField()
     end = serializers.DateTimeField()
-    subject = serializers.CharField(max_length=32)
+    subject = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field="name"
+    )
     tutor = TutorNameSerializer()
     group = serializers.SlugRelatedField(
         read_only=True,

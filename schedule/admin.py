@@ -4,6 +4,7 @@ from .models import *
 
 
 admin.site.register(Campus)
+admin.site.register(Subject)
 admin.site.register(Tutor)
 admin.site.register(Auditorium)
 admin.site.register(RingTime)
