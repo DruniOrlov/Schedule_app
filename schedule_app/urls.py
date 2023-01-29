@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 import schedule.urls
+import schedule.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/', include(schedule.urls))
+    path('api/v1/', include(schedule.urls)),
+    path('', schedule.views.index)
 ]

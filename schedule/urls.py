@@ -12,8 +12,12 @@ urlpatterns = [
     path('rings/', RingTimeCRView.as_view()),
     path('tutor/<int:pk>', TutorUDView.as_view()),
     path('tutor/', TutorCRView.as_view()),
+    path('tutorall/', TutorGetWithId.as_view()),
     path('auditorium/<int:pk>', AuditoriumUDView.as_view()),
     path('auditorium/', AuditoriumCRView.as_view()),
     path('group/<int:pk>', GroupUDView.as_view()),
     path('group/', GroupCRView.as_view()),
+    path('groupall/', GroupGetWithId.as_view()),
+    path('schedule/', DayScheduleView.as_view()),
+
 ]

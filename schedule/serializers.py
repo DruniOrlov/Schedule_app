@@ -10,7 +10,6 @@ class CampusSerializer(serializers.ModelSerializer):
 
 
 class TutorSerializer(serializers.ModelSerializer):
-
     email = serializers.EmailField(required=False)
     phone = serializers.CharField(max_length=10, required=False)
 
@@ -36,14 +35,31 @@ class TutorNameSerializer(serializers.ModelSerializer):
         fields = ["full_name"]
 
 
+class TutorNameIdSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    full_name = serializers.SerializerMethodField()
+
+    def get_full_name(self, obj):
+        return '{} {} {}'.format(obj.first_name, obj.last_name, obj.patronymic)
+
+    class Meta:
+        model = models.Tutor
+        fields = ["id", "full_name"]
+
+
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Group
-        fields = '__all__'
+        fields = ['__all__']
 
 
-class DaySerializer():
-    pass
+class GroupWithIdSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = models.Group
+        fields = ['id', 'name']
+
 
 class LessonSerializer(serializers.ModelSerializer):
     number = serializers.IntegerField()

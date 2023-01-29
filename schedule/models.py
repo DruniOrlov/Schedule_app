@@ -56,13 +56,17 @@ class Lesson(models.Model):
     number = models.SmallIntegerField()
     begin = models.DateTimeField()
     end = models.DateTimeField()
-    subject = models.ForeignKey("Subject", on_delete=models.CASCADE) #models.CharField(max_length=32)
+    subject = models.ForeignKey("Subject", on_delete=models.CASCADE)  # models.CharField(max_length=32)
     tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
     auditorium = models.ForeignKey("Auditorium", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.begin.date().__str__()
+
+    class Meta:
+        unique_together = ('begin', 'end', 'tutor', 'group', 'auditorium', 'subject', 'number')
+
 
 class Group(models.Model):
     # Require
