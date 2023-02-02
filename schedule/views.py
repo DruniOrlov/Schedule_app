@@ -224,9 +224,14 @@ class DayScheduleView(APIView):
         if request.GET.get("group") is None and request.GET.get("tutor") is None:
             return Response(status=http.HTTPStatus.BAD_REQUEST, data={"message": "param group or tutor require"})
         if request.GET.get("group"):
-            lessons.filter(group_id=int(request.GET.get("group")))
+            if lessons.filter(group_id=int(request.GET.get("group"))):
+                lessons = lessons.filter(group_id=int(request.GET.get("group")))
+            else: lessons = None
         elif request.GET.get("tutor"):
-            lessons.filter(tutor_id=int(request.GET.get("tutor")))
+            if lessons.filter(tutor_id=int(request.GET.get("tutor"))):
+                lessons = lessons.filter(tutor_id=int(request.GET.get("tutor")))
+            else: lessons = None
+
         serialized = {"date": date,
                       "lessons": LessonSerializer(lessons, many=True).data}
         if serialized:

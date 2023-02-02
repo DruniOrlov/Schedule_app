@@ -10,11 +10,11 @@ class Campus(models.Model):
         return self.short
 
 
-class Subject(models.Model):
-    name = models.CharField(max_length=32)
-
-    def __str__(self):
-        return self.name
+# class Subject(models.Model):
+#     name = models.CharField(max_length=32)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class Tutor(models.Model):
@@ -56,7 +56,7 @@ class Lesson(models.Model):
     number = models.SmallIntegerField()
     begin = models.DateTimeField()
     end = models.DateTimeField()
-    subject = models.ForeignKey("Subject", on_delete=models.CASCADE)  # models.CharField(max_length=32)
+    subject = models.CharField(max_length=32)
     tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE)
     group = models.ForeignKey("Group", on_delete=models.CASCADE)
     auditorium = models.ForeignKey("Auditorium", on_delete=models.CASCADE)
@@ -65,7 +65,13 @@ class Lesson(models.Model):
         return self.begin.date().__str__()
 
     class Meta:
-        unique_together = ('begin', 'end', 'tutor', 'group', 'auditorium', 'subject', 'number')
+        unique_together = [['begin', 'end', 'tutor'],
+                           ['begin', 'end', 'group'],
+                           ['tutor', 'group', 'begin', 'end'],
+                           ['group', 'auditorium', 'begin', 'end'],
+                           ['number', 'group', 'begin', 'end'],
+                           ['number', 'tutor', 'begin', 'end'],
+                           ['begin', 'end', 'tutor', 'group', 'auditorium', 'number']]
 
 
 class Group(models.Model):
