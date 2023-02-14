@@ -225,13 +225,12 @@ class DayScheduleView(APIView):
             return Response(status=http.HTTPStatus.BAD_REQUEST, data={"message": "param group or tutor require"})
         if request.GET.get("group"):
             if lessons.filter(group_id=int(request.GET.get("group"))):
-                lessons = lessons.filter(group_id=int(request.GET.get("group")))
+                lessons = lessons.filter(group_id=int(request.GET.get("group"))).order_by('number')
             else: lessons = None
         elif request.GET.get("tutor"):
             if lessons.filter(tutor_id=int(request.GET.get("tutor"))):
-                lessons = lessons.filter(tutor_id=int(request.GET.get("tutor")))
+                lessons = lessons.filter(tutor_id=int(request.GET.get("tutor"))).order_by('number')
             else: lessons = None
-
         serialized = {"date": date,
                       "lessons": LessonSerializer(lessons, many=True).data}
         if serialized:
@@ -286,4 +285,5 @@ class LessonUDView(mixins.UpdateModelMixin,
 
 
 def index(request):
-    return render(request=request, template_name='schedule/front/index.html')
+    context = {}
+    return render(request, "index.html", context)

@@ -71,10 +71,14 @@ class LessonSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field="name"
     )
+    subgroup = serializers.IntegerField()
     auditorium = serializers.SlugRelatedField(
         read_only=True,
         slug_field="short"
     )
+
+    # def __str__(self):
+
 
     class Meta:
         model = models.Lesson
