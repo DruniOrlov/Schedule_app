@@ -1,0 +1,32 @@
+version: '1'
+services:
+  backend:
+    build: ../../Schedule_app/backend
+#    command:
+#      - python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    restart: always
+    expose:
+      - 8000
+    environment:
+      - DB_NAME=schedule_db
+      - DB_USER=postgres
+      - DB_PASSWORD=strongpasswordfordatabase
+      - DB_HOST=db
+      - DB_PORT=5432
+      - ALLOWED_HOST = '127.0.0.1'
+    volumes:
+      - ./:/schedule
+    depends_on:
+      - db
+  db:
+    image: postgres:13
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_NAME=schedule_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=strongpasswordfordatabase
+    ports:
+      - 54321:5432

@@ -61,10 +61,15 @@ class GroupWithIdSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
+class RingTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.RingTime
+        fields = '__all__'
+
+
 class LessonSerializer(serializers.ModelSerializer):
-    number = serializers.IntegerField()
-    begin = serializers.DateTimeField()
-    end = serializers.DateTimeField()
+    ring_time = RingTimeSerializer()
+    date = serializers.DateField()
     subject = serializers.CharField()
     tutor = TutorNameSerializer()
     group = serializers.SlugRelatedField(
@@ -77,18 +82,12 @@ class LessonSerializer(serializers.ModelSerializer):
         slug_field="short"
     )
 
-    # def __str__(self):
-
-
     class Meta:
         model = models.Lesson
         fields = '__all__'
 
 
-class RingTimeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RingTime
-        fields = '__all__'
+
 
 
 class AuditoriumSerializer(serializers.ModelSerializer):

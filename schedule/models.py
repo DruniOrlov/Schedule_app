@@ -85,7 +85,7 @@ class Lesson(models.Model):
 
 
     def __str__(self):
-        return self.date + " Группа " + self.group.name.__str__() + " " + "#" + self.ring_time.number.__str__()
+        return self.date.__str__() + " Группа " + self.group.name.__str__() + " " + "#" + self.ring_time.number.__str__()
 
     class Meta:
         unique_together = [['date', 'ring_time', 'tutor'],
@@ -112,14 +112,25 @@ class Group(models.Model):
     def __str__(self):
         return self.name.__str__()
 
+
 class LessonMain(models.Model):
+
+    class Weekday(models.TextChoices):
+        MONDAY = "MON", "Понедельник"
+        TUESDAY = "TUE", "Вторник"
+        WEDNESDAY = "WED", "Среда"
+        THURSDAY = "THU", "Четверг"
+        FRIDAY = "FRI", "Пятница"
+        SATURDAY = "SAT", "Суббота"
+
     ring_time = models.ForeignKey("RingTime", on_delete=models.CASCADE, verbose_name="Номер")
-    dayofweek = models.CharField(max_length=16, verbose_name="День недели")
+    dayofweek = models.CharField(max_length=16, verbose_name="День недели", choices=Weekday.choices, default=None)
     subject = models.CharField(max_length=48, verbose_name="Предмет")
     tutor = models.ForeignKey("Tutor", on_delete=models.CASCADE, verbose_name="Преподаватель")
     group = models.ForeignKey("Group", on_delete=models.CASCADE, verbose_name="Группа")
     subgroup = models.SmallIntegerField(null=True, blank=True, verbose_name="Подгруппа", help_text="При необходимости разбейте группу на подгруппы")
     auditorium = models.ForeignKey("Auditorium", on_delete=models.CASCADE, verbose_name="Аудитория")
+    even = models.BooleanField(verbose_name="Четная неделя", null=True)
 
     def __str__(self):
         return self.dayofweek + " Группа " + self.group.name.__str__() + " " + "#" + self.ring_time.number.__str__()
